@@ -12,6 +12,7 @@ export enum chainProps {
   token_name,
   explorerUrl,
   decimals,
+  swap_contract,
 }
 
 const message_map: Record<chainProps, Record<NETWORKS, string>> = {
@@ -69,6 +70,11 @@ const message_map: Record<chainProps, Record<NETWORKS, string>> = {
     [NETWORKS.ETH]: '18',
     [NETWORKS.BSC]: '18',
     [NETWORKS.PLSM]: '18',
+  },
+  [chainProps.swap_contract]: {
+    [NETWORKS.ETH]: process.env.SCRT_SWAP_CONTRACT,
+    [NETWORKS.BSC]: process.env.BSC_SCRT_SWAP_CONTRACT,
+    [NETWORKS.PLSM]: process.env.PLSM_SWAP_CONTRACT,
   },
 };
 

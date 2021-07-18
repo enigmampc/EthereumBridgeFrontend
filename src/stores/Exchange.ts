@@ -4,11 +4,11 @@ import { statusFetching, SwapStatus } from '../constants';
 import { ACTION_TYPE, EXCHANGE_MODE, IOperation, ITokenInfo, TOKEN } from './interfaces';
 import * as operationService from 'services';
 import * as contract from '../blockchain-bridge';
-import { NETWORKS, Snip20SendToBridge, Snip20SwapHash, swapContractAddress } from '../blockchain-bridge';
+import { NETWORKS, Snip20SendToBridge, Snip20SwapHash, web3 } from '../blockchain-bridge';
 import { balanceNumberFormat, divDecimals, formatSymbol, mulDecimals, uuid } from '../utils';
 import { getNetworkFee } from '../blockchain-bridge/eth/helpers';
-import { web3 } from '../blockchain-bridge';
 import { proxyContracts, ProxyTokens } from '../blockchain-bridge/eth/proxyTokens';
+import { chainProps, chainPropToString } from '../blockchain-bridge/eth/chainProps';
 
 export const LOCAL_STORAGE_OPERATIONS_KEY = 'operationskey';
 
@@ -529,18 +529,18 @@ export class Exchange extends StoreConstructor {
 
     let proxyContract: string;
     let decimals: number | string;
-    let recipient = swapContractAddress(this.network);
-    let price: string;
+    let recipient = chainPropToString(chainProps.swap_contract, this.network);
+    //let price: string;
     if (isNative) {
       const token = this.tokens.find(t => t.src_address === 'native');
       decimals = token.decimals;
-      price = token.price;
+      //price = token.price;
       this.transaction.snip20Address = token.dst_address;
     } else {
       const token = this.tokens.find(t => t.dst_address === this.transaction.snip20Address);
       if (token) {
         decimals = token.decimals;
-        price = token.price;
+        //price = token.price;
         this.transaction.snip20Address = token.dst_address;
         // todo: fix this up - proxy token
         if (token.display_props.proxy) {
